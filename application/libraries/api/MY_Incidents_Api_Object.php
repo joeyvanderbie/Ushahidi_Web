@@ -248,6 +248,23 @@ class Incidents_Api_Object extends Api_Object_Core {
 					$this->response_data = $this->_get_incidents($params);
 				}
 			break;
+			
+			 case "deletedsince": //delete items since add date 
+                       if($this->api_service->verify_array_index($this->request,'date')){
+                       $params = array(
+							'i.incident_dateadd > '.$this->request['date'], 
+							'i.incident_active = -1',
+							'all_reports'=>'TRUE'
+						);
+
+					$this->response_data = $this->_get_incidents($params);
+                       
+                      } else {
+                         $this->set_error_message(array(
+						"error" => $this->api_service->get_error_msg(001, 'date')
+						));
+            }
+       		 break; 
 
 			// Get incidents less that a specific incident_id
 			case "maxid":
